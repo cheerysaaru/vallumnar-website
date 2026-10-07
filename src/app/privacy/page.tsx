@@ -29,13 +29,16 @@ export default function PrivacyPage() {
         <p>
           Form submissions are sent to Vallumnar using the configured email
           delivery provider. Do not include sensitive personal information that
-          is not needed for your enquiry or application. We do not intentionally
-          use advertising cookies or analytics in this draft.
+          is not needed for your enquiry or application. If you subscribe to
+          company updates, your email address and consent are stored in the
+          configured newsletter audience provider so we can manage your
+          subscription and unsubscribe requests. We do not intentionally use
+          advertising cookies or analytics in this draft.
         </p>
         <h2>Retention and your choices</h2>
         <p>
           Set a retention period and contact process before launch. You may ask
-          about information you have submitted using{" "}
+          about information you have submitted, or to ask to unsubscribe, using{" "}
           {siteConfig.contactEmail ? (
             <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>
           ) : (

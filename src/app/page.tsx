@@ -4,7 +4,7 @@ import { HomeSections } from "@/app/home-sections";
 export const metadata: Metadata = {
   title: "Technology that moves business forward",
   description:
-    "Vallumnar brings people, design and engineering together to create digital products and technology that move your business forward.",
+    "Vallumnar provides custom software development, web and mobile apps, cloud, DevOps, IT consulting, UI/UX design, data, AI, QA and support.",
   alternates: { canonical: "/" },
 };
 

@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { applicationSchema, contactSchema, MAX_CV_BYTES, ACCEPTED_CV_TYPES } from "@/lib/validation";
+import {
+  ACCEPTED_CV_TYPES,
+  applicationSchema,
+  contactSchema,
+  MAX_CV_BYTES,
+  newsletterSchema,
+} from "@/lib/validation";
 
 describe("contactSchema", () => {
   it("accepts a complete valid enquiry", () => {
@@ -69,5 +75,24 @@ describe("applicationSchema", () => {
     expect(MAX_CV_BYTES).toBe(5 * 1024 * 1024);
     expect(ACCEPTED_CV_TYPES.has("application/pdf")).toBe(true);
     expect(ACCEPTED_CV_TYPES.has("image/png")).toBe(false);
+  });
+});
+
+describe("newsletterSchema", () => {
+  it("requires a valid address and explicit consent", () => {
+    expect(
+      newsletterSchema.safeParse({
+        email: "reader@example.com",
+        consent: true,
+        website: "",
+      }).success,
+    ).toBe(true);
+    expect(
+      newsletterSchema.safeParse({
+        email: "reader@example.com",
+        consent: false,
+        website: "",
+      }).success,
+    ).toBe(false);
   });
 });

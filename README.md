@@ -7,7 +7,7 @@ TypeScript, Tailwind CSS and Lucide icons.
 
 - Node.js 20.9 or newer
 - npm
-- A Resend account/API key to deliver contact and career form submissions
+- A Resend account/API key to deliver forms and a Resend audience for newsletter signups
 
 ## Local development
 
@@ -30,6 +30,7 @@ recipient addresses are configured.
 | `EMAIL_FROM` | Yes for form delivery | Verified sender address, e.g. `Vallumnar <website@example.com>` |
 | `CONTACT_EMAIL` | Yes for contact form | Contact enquiry recipient |
 | `APPLICATION_EMAIL` | Yes for careers form | Job application recipient |
+| `RESEND_AUDIENCE_ID` | Yes for newsletter signups | Resend audience that stores opted-in contacts |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Optional | Public contact email shown on the site |
 | `NEXT_PUBLIC_PHONE` | Optional | Public phone number |
 | `NEXT_PUBLIC_ADDRESS` | Optional | Public postal address |
@@ -37,10 +38,11 @@ recipient addresses are configured.
 Never prefix private credentials with `NEXT_PUBLIC_`. Never commit `.env.local`.
 
 The APIs limit each client address to five requests per 15 minutes per Node.js
-process and use a hidden honeypot field. This lightweight limiter is suitable
-for a single Node process; before deploying to a serverless or multi-instance
-environment, replace it with a shared rate-limit store and ensure the hosting
-proxy overwrites forwarded-IP headers.
+process and use a hidden honeypot field. Newsletter signup requires explicit
+consent and stores the address in the configured Resend audience. This
+lightweight limiter is suitable for a single Node process; before deploying to
+a serverless or multi-instance environment, replace it with a shared rate-limit
+store and ensure the hosting proxy overwrites forwarded-IP headers.
 
 ## Editing content
 
@@ -50,8 +52,9 @@ proxy overwrites forwarded-IP headers.
 - Public company details and social links: `src/content/site.ts` and `.env.local`
 - Design tokens and responsive styles: `src/app/globals.css`
 
-Products and job openings are intentionally empty until Vallumnar confirms real
-details. The website uses a temporary text-and-symbol wordmark; replace it with
+Product names, product descriptions and company statistics are visible as
+bracketed placeholders. Job openings remain empty until Vallumnar confirms real
+roles. The website uses a temporary text-and-symbol wordmark; replace it with
 the approved brand assets before launch. See [CONTENT_TODO.md](./CONTENT_TODO.md)
 for all remaining content and launch decisions.
 

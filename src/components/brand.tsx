@@ -14,7 +14,7 @@ export function Brand({ footer = false }: { footer?: boolean }) {
         viewBox="0 0 34 34"
         fill="none"
       >
-        <rect width="34" height="34" rx="11" fill="currentColor" />
+        <rect width="34" height="34" rx="11" fill="#1D4ED8" />
         <path
           d="M8.5 11.5 16.8 24l8.7-13"
           stroke="white"

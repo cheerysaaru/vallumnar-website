@@ -7,4 +7,6 @@ export const siteConfig = {
   phone: process.env.NEXT_PUBLIC_PHONE || "",
   address: process.env.NEXT_PUBLIC_ADDRESS || "",
   socialLinks: [] as { label: string; href: string }[],
+  newsletterConsent:
+    "I agree to receive occasional company and technology updates. I can unsubscribe at any time.",
 };

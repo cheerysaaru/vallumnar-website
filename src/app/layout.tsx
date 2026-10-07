@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { BackToTop } from "@/components/back-to-top";
 import { siteConfig } from "@/content/site";
 
 const inter = Inter({
@@ -58,10 +59,13 @@ export default function RootLayout({
       <body>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organization).replace(/</g, "\\u003c"),
+          }}
         />
         <SiteHeader />
         <main id="main-content">{children}</main>
+        <BackToTop />
         <SiteFooter />
       </body>
     </html>
