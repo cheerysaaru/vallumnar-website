@@ -88,6 +88,9 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
+      <div className="page-shell footer-wordmark" aria-hidden="true">
+        Vallumnar
+      </div>
       <div className="page-shell footer-bottom">
         <span>© {new Date().getFullYear()} Vallumnar</span>
         <div className="footer-legal">

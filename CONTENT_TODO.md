@@ -17,6 +17,11 @@
   `src/content/products.ts`.
 - Replace each `[X+]` in `src/content/stats.ts` with verified statistics or
   remove that stat if it should not be published.
+- Replace `[DATE]`, `[INSIGHT TITLE]` and `[INSIGHT EXCERPT]` in
+  `src/content/insights.ts` with approved, published articles before linking
+  the homepage cards to them.
+- Confirm the draft FAQ answers in `src/content/home.ts` reflect Vallumnar's
+  actual service scope, project approach and application process.
 - Add confirmed openings, location, employment type, posting date and role
   details to `src/content/jobs.ts`. The careers page intentionally shows an
   empty state until roles are confirmed.

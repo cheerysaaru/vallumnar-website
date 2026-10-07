@@ -14,7 +14,7 @@ export function Brand({ footer = false }: { footer?: boolean }) {
         viewBox="0 0 34 34"
         fill="none"
       >
-        <rect width="34" height="34" rx="11" fill="#1D4ED8" />
+        <rect width="34" height="34" rx="11" fill="#0B2A4A" />
         <path
           d="M8.5 11.5 16.8 24l8.7-13"
           stroke="white"
@@ -22,7 +22,7 @@ export function Brand({ footer = false }: { footer?: boolean }) {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <circle cx="26" cy="10" r="2" fill="#7DD3FC" />
+        <circle cx="26" cy="10" r="2" fill="#F2C94C" />
       </svg>
       <span>vallumnar</span>
     </Link>

@@ -3,55 +3,58 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Brand } from "@/components/brand";
-import { services } from "@/content/services";
-
-const groups = [
-  {
-    label: "Services",
-    href: "/services",
-    items: services.map((service) => ({
-      label: service.title,
-      href: `/services#${service.slug}`,
-    })),
-  },
-  {
-    label: "Products",
-    href: "/products",
-    items: [{ label: "[PRODUCT NAME]", href: "/products/product-name-placeholder" }],
-  },
-];
 
 const links = [
-  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Products", href: "/products" },
   { label: "Careers", href: "/careers" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
-
-function closeOpenMenus() {
-  document.querySelectorAll<HTMLDetailsElement>(".nav-dropdown[open]").forEach((menu) => {
-    menu.open = false;
-  });
-}
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [homeScrollPassed, setHomeScrollPassed] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const scrolled = pathname !== "/" || homeScrollPassed;
   const menuButton = useRef<HTMLButtonElement>(null);
   const mobileDialog = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (pathname !== "/") return;
-    const updateScrollState = () => setHomeScrollPassed(window.scrollY > 24);
-    const frame = window.requestAnimationFrame(updateScrollState);
+    let previousY = window.scrollY;
+    let frame = 0;
+    const updateScrollState = () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        setHomeScrollPassed(currentY > 24);
+        if (open || currentY <= 24 || currentY < previousY - 3) {
+          setHidden(false);
+        } else if (currentY > previousY + 3 && currentY > 120) {
+          setHidden(true);
+        }
+        previousY = currentY;
+      });
+    };
+    updateScrollState();
     window.addEventListener("scroll", updateScrollState, { passive: true });
     return () => {
-      window.cancelAnimationFrame(frame);
+      if (frame) window.cancelAnimationFrame(frame);
       window.removeEventListener("scroll", updateScrollState);
     };
-  }, [pathname]);
+  }, [open, pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -91,50 +94,28 @@ export function SiteHeader() {
 
   function closeMenu() {
     setOpen(false);
-    closeOpenMenus();
     menuButton.current?.focus();
   }
 
   const isHomeTop = pathname === "/" && !scrolled;
+  const headerClassName = [
+    "site-header",
+    pathname === "/" ? "is-home" : "",
+    isHomeTop ? "is-home-top" : "",
+    scrolled ? "is-scrolled" : "",
+    hidden && !open ? "is-hidden" : "",
+    open ? "is-menu-open" : "",
+  ].filter(Boolean).join(" ");
 
   return (
-    <header className={`site-header${pathname === "/" ? " is-home" : ""}${isHomeTop ? " is-home-top" : ""}${scrolled ? " is-scrolled" : ""}`}>
+    <header className={headerClassName}>
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
       <div className="page-shell header-inner">
         <Brand />
         <nav className="main-nav" aria-label="Main navigation">
-          {groups.map((group) => (
-            <details className="nav-dropdown" key={group.label}>
-              <summary>
-                <span>{group.label}</span>
-                <ChevronDown size={14} aria-hidden="true" />
-              </summary>
-              <div className="dropdown-panel">
-                {group.items.map((item) => (
-                  <Link href={item.href} key={item.href} onClick={closeOpenMenus}>
-                    {item.label}
-                  </Link>
-                ))}
-                <Link className="dropdown-all" href={group.href} onClick={closeOpenMenus}>
-                  Explore all {group.label.toLowerCase()} <span aria-hidden="true">↗</span>
-                </Link>
-              </div>
-            </details>
-          ))}
           {links.map((link) => <Link href={link.href} key={link.href}>{link.label}</Link>)}
-          <details className="nav-dropdown">
-            <summary>
-              <span>Resources</span>
-              <ChevronDown size={14} aria-hidden="true" />
-            </summary>
-            <div className="dropdown-panel">
-              <Link href="/blog">Blog <span className="coming-soon-tag">Soon</span></Link>
-              <Link href="/case-studies">Case studies <span className="coming-soon-tag">Soon</span></Link>
-            </div>
-          </details>
-          <Link href="/contact">Contact</Link>
           <Link className="header-contact" href="/contact">
             Contact us <span aria-hidden="true">↗</span>
           </Link>
@@ -163,24 +144,7 @@ export function SiteHeader() {
       >
         <nav className="mobile-nav" aria-label="Mobile navigation">
           <Link href="/" onClick={closeMenu}>Home</Link>
-          {groups.map((group) => (
-            <details key={group.label}>
-              <summary>{group.label}<ChevronDown size={17} aria-hidden="true" /></summary>
-              <div className="mobile-nav-submenu">
-                {group.items.map((item) => <Link href={item.href} key={item.href} onClick={closeMenu}>{item.label}</Link>)}
-                <Link href={group.href} onClick={closeMenu}>Explore all {group.label.toLowerCase()}</Link>
-              </div>
-            </details>
-          ))}
           {links.map((link) => <Link href={link.href} key={link.href} onClick={closeMenu}>{link.label}</Link>)}
-          <details>
-            <summary>Resources<ChevronDown size={17} aria-hidden="true" /></summary>
-            <div className="mobile-nav-submenu">
-              <Link href="/blog" onClick={closeMenu}>Blog · Coming soon</Link>
-              <Link href="/case-studies" onClick={closeMenu}>Case studies · Coming soon</Link>
-            </div>
-          </details>
-          <Link href="/contact" onClick={closeMenu}>Contact</Link>
           <Link className="button mobile-contact" href="/contact" onClick={closeMenu}>Contact us ↗</Link>
         </nav>
       </div>

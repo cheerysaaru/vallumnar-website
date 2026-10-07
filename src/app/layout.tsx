@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { BackToTop } from "@/components/back-to-top";
+import { RouteTransition } from "@/components/route-transition";
 import { siteConfig } from "@/content/site";
 
 const inter = Inter({
@@ -64,7 +65,9 @@ export default function RootLayout({
           }}
         />
         <SiteHeader />
-        <main id="main-content">{children}</main>
+        <main id="main-content">
+          <RouteTransition>{children}</RouteTransition>
+        </main>
         <BackToTop />
         <SiteFooter />
       </body>

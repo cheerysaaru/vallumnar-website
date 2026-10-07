@@ -49,8 +49,15 @@ store and ensure the hosting proxy overwrites forwarded-IP headers.
 - Services: `src/content/services.ts`
 - Products: `src/content/products.ts`
 - Open roles: `src/content/jobs.ts`
+- Homepage audience cards and FAQ copy: `src/content/home.ts`
+- Homepage insight-card placeholders: `src/content/insights.ts`
 - Public company details and social links: `src/content/site.ts` and `.env.local`
 - Design tokens and responsive styles: `src/app/globals.css`
+- Homepage hero canvas and scroll behavior: `src/components/hero-field.tsx` and
+  `src/components/home-motion.tsx`
+
+The homepage artwork is generated locally with a small Canvas 2D component; no
+reference-site media or animation library is embedded.
 
 Product names, product descriptions and company statistics are visible as
 bracketed placeholders. Job openings remain empty until Vallumnar confirms real
