@@ -1,94 +1,158 @@
 # Vallumnar Motion Spec
 
-**Status: research complete; awaiting approval. No feature code has been changed.**
+**Status: Step 0 research for the revised master prompt. Awaiting approval. No site code has been changed in this round.**
+This document replaces the previous motion spec. The existing homepage implementation predates this prompt and will be reworked after approval.
 
 ## Evidence and confidence
 
-- **MEASURED** means observed in a real browser or read directly from source-video metadata.
-- **ESTIMATED** means inferred from the supplied handheld recordings, or a proposed Vallumnar design target. Phone-camera perspective, moire and missing frames make recording timings approximate.
-- The recordings were sampled with FFmpeg at **MEASURED: 1 frame per second** for their first **MEASURED: 10 seconds**. This helps identify sequence and mood, not frame-accurate easing or opacity.
-- The source recordings remain in the user's Downloads folder; they were not copied into the repository. Extracted frames are study-only and are not deliverables.
+- **MEASURED** = observed in a real browser (Playwright Chromium), read from the DOM/computed styles, or read from video stream metadata.
+- **ESTIMATED** = inferred from handheld recordings, or a proposed Vallumnar design target. ESTIMATED values are proposals, not reference facts.
+- Study method: pages opened at **1440 × 900** and **390 × 844**; hero recorded with Playwright video; frames extracted with FFmpeg at **1 fps** (plus targeted timestamps and FFmpeg `scene` detection / `signalstats`). Frame extraction and all study artifacts live outside the repository and are never committed.
+- Copyright: the three references are studied for pattern, structure, pacing and feel only. No video, image, font, copy, code or artwork is downloaded into, embedded in, or committed to this repository.
 
 ## Sources examined
 
-| Source | Browser or file evidence |
+| Source | Evidence |
 | --- | --- |
-| Current Vana landing page, `https://vana.org/` | **MEASURED:** Opened in the integrated browser at **1440 × 900 px** and **390 × 844 px**. Its hero uses `hero.mp4`; browser media properties report a **21.287933 s** duration, looping, autoplay, muted playback, and normal **1×** playback rate. No canvas was present. |
-| Awwwards Vana listing, `https://www.awwwards.com/sites/vana` | **MEASURED:** The “Visit Site” link points to `https://www.vana.com/`. A cookie dialog intercepted the click, so the destination was opened directly. The current destination resolves to Vana's current site. No Wayback link was exposed on the listing page; an archived capture was opened directly at `https://web.archive.org/web/20221019100623/https://www.vana.com/`. |
-| Vana archive, `https://web.archive.org/web/20221019100623/https://www.vana.com/` | **MEASURED:** Opened at both reference viewport widths. The archived page loads Webflow and jQuery; `Webflow.require('ix2')` is available. No GSAP, ScrollTrigger, Lenis, Lottie, Three.js global, canvas, or video was detected in the sampled page. This identifies the visible runtime, not every possible implementation detail. |
-| `hero sectionn animation.mp4` | **MEASURED (file metadata):** **24.7667 s**, **1024 × 576 px**, **30 fps**. |
-| `layout style and format.mp4` | **MEASURED (file metadata):** **12.1333 s**, **576 × 1024 px**, **30 fps**. The footage shows the Awwwards site's “highlights” cards being browsed, not a clean recording of the original Vana page. |
-| `aniamtion looks.mp4` | **MEASURED (file metadata):** **22.2667 s**, **576 × 1024 px**, **30 fps**. The airline/travel-tech recording is used only for the motion patterns listed below. |
+| `https://vana.org/` (Ref A, current site) | **MEASURED** in real browser at both viewports: DOM, computed styles, scroll trace, 22 s Playwright recording, per-second brightness/color samples, scene-change detection. |
+| `https://www.awwwards.com/sites/vana` (Ref B listing) | **MEASURED:** "Visit Site" → `https://www.vana.com/`; SOTD badge 7.36/10. |
+| `https://web.archive.org/web/20221019100623/https://www.vana.com/` (Ref B, 2022 site) | **MEASURED** in real browser at both viewports: sections, type, cards, pills, FAQ click, hover, header scroll trace. |
+| `aniamtion looks.mp4` (Ref C, airline/travel-tech, user recording) | **MEASURED (file):** 22.27 s, 576 × 1024, 30 fps, with audio. Frames labeled 1–22 s analyzed as a contact sheet. Scroll distances and pin lengths cannot be measured from a handheld recording — Ref C timing values below are ESTIMATED. |
+| `hero sectionn animation.mp4`, `layout style and format.mp4` | User recordings of Refs A/B; superseded by the real-browser measurements above. |
 
-## Findings: Vana hero
+---
 
-### Current live page
+## Ref A — Vana hero (MEASURED)
 
-| Observation | Evidence |
+### What drives the motion
+
+- **No GSAP, ScrollTrigger, Lenis, Lottie, Three.js, WebGL, canvas or Webflow was present.** Globals probed in-page: none found; `document.querySelectorAll('canvas')` → 0; no matching script URLs.
+- The hero animation is a **background `<video>`**: `hero.webm`, **duration 21.288 s**, `loop`, `muted`, autoplaying at **1×**, `object-fit: cover`, rendered **1440 × 746** (desktop) and **390 × 696** (mobile).
+- Page stack: Next.js-style CSS module classes + Tailwind utilities; font **Onest** (module-scoped `@font-face`).
+- Conclusion for Vallumnar: the reference achieves its calm morph with a baked video, not code. Vallumnar's brief requires a **code-built** halftone field instead — pattern borrowed, asset not.
+
+### Animation content, cycle and colors
+
+- The field cycles through distinct abstract states. Confirmed states in frames: **horizontal scan-line globe → denser scan-line globe → glyph/dot raster mass → soft painterly solid → scan-line hand/organic silhouette**, then back.
+- **Loop length: 21.288 s** (media metadata). FFmpeg scene detection on the hero region (threshold 0.06) found change points at recording times 2.6 / 5.08 / 7.96 / 11.24 / 15.12 / 17.36 s, then a rapid sequence at 19.0–20.96 s. With content first painted at ≈2.6 s, transitions are ≈**2.2–3.9 s apart**, i.e. roughly **5–6 discernible states per loop → ≈3.5–4.3 s average dwell**, with a faster dissolve burst near the loop end.
+- Transitions are **gradual blends**, not cuts (intermediate frames show mixed states).
+- **Brightness** of the right-side field (FFmpeg `signalstats.YAVG` on a 720 × 700 crop, per second): oscillates **162 → 200 → 162** — about a 15 % luma swing, darkest during dense violet states, lightest during pale solid states.
+- **Colors sampled from full-resolution screenshots:** page/cream background **#FCFCFA**; field light state **#B9B0ED**; field deep state **#9286EC / #8884E8**; mid blend **#BAB2F4 → #DDD8F7**. Per-second right-edge samples run **#8884E8 ↔ #CFCDEA**. Headline **#111111** (computed `rgb(17,17,17)`).
+- The field occupies the full hero area but is visually weighted to the right; the left third stays near-white behind the copy.
+
+### Headline, subtitle, header
+
+- **Headline does not animate after load.** Samples over 2 s: `opacity: 1`, `transform: none`, constant `y`. The page renders complete at first paint (screenshot at t ≈ 1.5 s already shows the full hero). No staggered entrance measured.
+- Desktop: h1 **108 px / 95.04 px line-height (0.88), weight 500, letter-spacing −5.4 px (−0.05 em)**, box 1002 × 190 at x = 146, y = 236. Subtitle **25 px / 30 px**, letter-spacing −0.375 px, 70 % black, width 865 px.
+- Mobile: h1 **52 px / 45.76 px, −2.6 px**, box 364 × 92 at x = 11, **y = 440** (lower half of the 844 px viewport). Subtitle **20 px / 24 px**.
+- Hero height = **90 svh − nav**: 746 px at 1440 × 900; 696 px at 390 × 844.
+- Header: **64 px, `position: sticky; top: 0`**, opaque **#FCFCFA**, z-40, nav links 15–17 px, filled CTA **#4141FC**.
+
+### Scroll behavior
+
+- **No pinning.** Scroll trace: `scrollY` 0 → 1400 with hero top 0 → −1400 (1:1). Header remains at viewport top at every step with constant background — **no hide/show, no background change**.
+- After the hero, a row of numbered feature cards ("FOR YOU 01 …") scrolls in beneath.
+
+---
+
+## Ref B — Vana 2022 (Awwwards era, archived) (MEASURED)
+
+### Libraries
+
+- **jQuery 3.5.1** and the **Webflow runtime** (`webflow.74d14d168.js`); `Webflow.require('ix2')` available. No GSAP, ScrollTrigger, Lenis, Lottie or Three.js detected.
+
+### Motion behaviors
+
+| Behavior | Measurement |
 | --- | --- |
-| Hero media | **MEASURED:** A muted, autoplaying, looping video with `object-fit: cover`; browser reports **21.287933 s** per media loop. No canvas was present. |
-| Desktop composition | **MEASURED:** At **1440 × 900 px**, the hero section is **746 px** tall and the video box is **1430 × 746 px**. The sticky header is **64 px** tall. The heading is **108 px** with **95.04 px** line-height; the subtitle is **25 px**. |
-| Mobile composition | **MEASURED:** At **390 × 844 px**, the hero section and video box are **696 px** tall; the browser content width is **380 px**. The heading is **52 px**, its box is **354 × 92 px**, and the sticky header is **64 px** tall. The navigation changes to a “Menu” button. |
-| Motion samples | **MEASURED:** At media time **0 s**, the right side has a pale, soft abstract texture. At **5 s**, the texture resolves into bright horizontal scan-line-like bands. At **10 s**, a denser, grainy raster texture is visible. These are individual sampled frames, not measured transition boundaries. |
-| Scroll | **MEASURED:** After scrolling **350 px** on the mobile viewport, the header remains at viewport top (**0 px**) while the hero moves upward; the hero section top is at **−286 px**. At this observed point, the hero is scrolling with the page rather than remaining pinned. |
+| Button hover | **`transition: 0.3 s all cubic-bezier(0.77, 0, 0.175, 1)`**; hover flips background **#0075FF → #FFFFFF** and text **#FFFFFF → #0075FF** (color inversion, no movement). |
+| Feature card hover | **MEASURED: no lift, no shadow, no transform.** Computed `transition: 0s all ease`; real `page.hover` leaves `transform: none`, `box-shadow: none`. Arrow icons also `0s`. |
+| Scroll reveal | **No reveal-on-scroll measured.** Statement heading sampled through a full top-to-bottom scroll: `opacity` constant **1**, `transform: none`, `transition: 0s ease`. Only 10 `data-w-id` nodes exist on the page. |
+| Accordion | Row `.questions__box--content` collapsed **h = 98 px**, expanded **h = 186 px** (+88 px answer). After click, height settles within **≈33 ms**; row `transition: 0s all ease` → **effectively instant, no smooth height animation** on the reference. |
+| Header | **`position: fixed`, transparent.** Hides by `translateY(-160 px)` while scrolling down and animates back on scroll up (a mid-animation sample caught `translateY(-32.8 px)`). |
+| Section rhythm | Alternating bands: white hero → **#F5F4F4** grey bands → **#DBFF00** lime FAQ panel → grey footer. |
 
-The animated texture stays behind the copy. The visual change is broad and soft rather than a rapid sequence of interface animations. The page's cookie panel is unrelated to the proposed Vallumnar motion and is not a design pattern to copy.
+### Reference takeaway
 
-### Supplied hero recording
+Ref B contributes **pacing and component shape**, not motion craft: hover is a 300 ms color flip, the accordion snaps, and there are no scroll reveals. Vallumnar's richer reveal/accordion motion (below) is therefore an original extension, not a copy.
 
-- **ESTIMATED:** In the first **10 s** of sampled footage, the pale cream-to-violet field cycles among fine dot patterns, soft organic masses, and horizontal/raster-like forms on the right side. The text remains visually steady while the field changes.
-- **ESTIMATED:** Visible states change on the order of a few seconds. A plausible reading of the sampled sequence is about **2–4 s per visible state**, but the recording is too short and too handheld to establish a loop length or exact state boundaries.
-- **ESTIMATED:** Morphing appears gradual, with some frames reading as intermediate blends rather than hard cuts. Exact easing, opacity, dot count, brightness values and transition duration cannot be measured from this recording.
-- The changing backdrop is a useful pattern reference; the original silhouettes, artwork, exact colors and Vana copy are not to be reproduced.
+---
 
-## Findings: motion elsewhere
+## Ref C — airline / travel-tech site (from user recording)
 
-- **MEASURED:** The archived Awwwards-era page exposes the Webflow runtime and its `ix2` module. The page inspection did not establish exact per-element durations or easing curves. Do not treat Webflow's presence as proof of a particular scroll animation.
-- **ESTIMATED:** The supplied Awwwards recording moves through featured design cards as the viewer scrolls; it is evidence of editorial pacing, not a reliable source for the original page's interaction timings.
-- **ESTIMATED:** The airline recording shows a rounded media area growing into a large viewport-filling panel, dark-to-light section changes, gradient-lit statistic cards, and a strongly colored pre-footer callout. The camera recording does not allow reliable pixel, easing, or duration measurement. No airline-site URL was supplied, so its animation library cannot be verified.
+**ESTIMATED timings** — handheld recording, scroll speed unknown. Sequence (second labels from the labeled contact sheet):
+
+| Time | Observed pattern |
+| --- | --- |
+| 1–2 s | **Dark hero**, large centered white headline, multi-color gradient glow (orange/green/red) behind it, small stat row; a wide **rounded photo card** sits below the headline. |
+| 3–4 s | The rounded card **expands to nearly fullscreen** while scrolling (rounded corners still visible at full size), then **overlay text fades in on top of the photo**. |
+| 5–6 s | Card releases; **light section** with a small centered rounded photo and a centered headline. |
+| 7–8 s | **Light → dark flip**: cream section gives way to a dark band with small centered gold/white text. |
+| 9–15 s | Dark sections: service/feature cards with **gradient tile backgrounds**, left-aligned headlines, a **row of 4 stat/feature tiles** at 14–15 s. |
+| 15–16 s | **Dark → light flip** back to a cream section with centered dark text. |
+| 16–20 s | Light editorial sections with large imagery and overlay text cards. |
+| 21–22 s | **Bold red CTA band**, then a **dark footer** with link columns. |
+| all frames | A **floating, centered bottom pill** stays on screen (white pill with a red action inside). |
+
+**Not measurable from this recording:** pin distance, scale values, radius change, exact trigger points, transition durations. Treated as ESTIMATED proposals below.
+
+---
 
 ## Proposed original Vallumnar motion
 
-All values in this section are **ESTIMATED (proposed design targets, not reference measurements)** and require approval before implementation.
+All values in this section are **ESTIMATED design targets requiring approval**. Palette, copy and artwork are Vallumnar's own; no reference assets are used.
 
-### Hero field
+### Tokens (site-wide)
 
-- Build an original, lightweight **2D canvas** field over a white-to-light-blue gradient, concentrated over roughly **55%** of the hero's right side and fading toward the text.
-- Use only abstract engineering motifs: a flowing wave, a network of nodes, a globe made from latitude-like lines, and layered forms. Do not use Vana's silhouettes, icons, footage, images, fonts, or code.
-- Target a **6–9 s** dwell per motif, with a **1.2–1.6 s** blend through dots, raster lines, and a soft solid phase. These are starting targets from the revised user brief, not measured Vana timings.
-- The headline and supporting copy should remain still during the ambient loop. Maintain readable contrast over every frame; the texture must never pass over or compete with the text.
-- Provide a static CSS gradient immediately. Load the canvas after first paint, cap mobile device pixel ratio at **1.5**, reduce the dot count on constrained devices, and pause rendering when the canvas is off-screen or the tab is hidden.
+- Durations: **200 / 400 / 700 / 1200 ms**. Easings: **expo-out** for entrances, **ease-in-out** for transitions. Stagger: **80–120 ms**.
+- Animate only `transform`, `opacity`, plus CSS-variable color tweens for theme flips. No layout-shift animation.
+- Libraries: **Lenis** smooth scroll (disabled under reduced motion) + **GSAP + ScrollTrigger**, code-split per route. Cleanup of listeners/ScrollTriggers on unmount.
 
-### Entrance, reveals and hover
+### 1. Hero halftone field (original, code-built)
 
-- Proposed first-load sequence: about **1.6 s** total; background sharpens over about **1.2 s**, headline lines reveal with **80–120 ms** stagger, then subtitle and actions fade upward, with the header last.
-- Proposed motion tokens: **200, 400, 700 and 1200 ms**; `expo-out` for entrances, `ease-in-out` for transitions, and **80–120 ms** stagger between related items.
-- Proposed section reveal: label, masked heading, paragraph and action in order; opacity **0 → 1** with about **24 px** upward travel.
-- Proposed cards: stagger on entry; on hover, translate upward about **4–6 px**, soften the shadow and nudge the arrow. Keep keyboard focus equally visible and do not rely on hover to reveal required content.
-- Prefer transform and opacity. Color transitions on section theme changes are the only proposed exception; avoid layout-affecting animation.
+- Canvas 2D (chosen over WebGL as the lighter option; revisit only if profiling demands).
+- Cycle **3–4 original abstract forms** (flowing wave, node network, gear/cloud/shield silhouette). Per-form dwell **6–8 s** (deliberately calmer than the reference's ≈3.5–4.3 s).
+- Phase sequence per form: **scattered dots → dense dot grid → horizontal scan-lines → soft solid → dissolve to next form**; blend **1.2–1.6 s** between phases.
+- Gradient base **#F3F8FC → #2779A7 → #1D4ED8**, dots in blue tones; `data-theme="dark"` variant **#0B2A4A → #1E3A8A** for the careers band.
+- Pointer bend on desktop (field skews gently toward the cursor); touch = drift only.
+- Text contrast over every frame: headline #0F172A over #F3F8FC ≈ **16.9:1**; white over #2779A7 ≈ **4.8:1** (AA); white over #1D4ED8 ≈ **6.3:1** (AA).
 
-### Site-wide motion behaviors
+### 2. Intro sequence (~1.6 s, once)
 
-- **ESTIMATED (proposed):** The header is transparent over the hero, becomes a solid blurred bar after scrolling, hides while scrolling down and returns while scrolling up.
-- **ESTIMATED (proposed):** The mobile menu uses a full-screen overlay with staggered links. Route changes use a short fade; the **200 ms** token is a starting point, not an observed reference duration.
-- **ESTIMATED (proposed):** Large original illustrations use restrained parallax. The expanding illustration panel grows to full width or screen as the reader scrolls, then releases naturally.
-- **ESTIMATED (proposed):** Selected sections transition between deep-blue and light backgrounds; keep color changes smooth and avoid moving layout. Stat values count up only when they represent verified Vallumnar facts.
-- **ESTIMATED (proposed):** Register and remove scroll triggers and event listeners with component lifecycle; do not leave animation work running after navigation or while the hero is off-screen.
+- Background **blur/dark → sharp ≈1.2 s**; headline **masked line-by-line slide-up**, **80–120 ms stagger, expo-out**; subtitle and buttons fade-up after; **header fades in last**.
 
-### Scroll and accessibility
+### 3. Scroll behaviors
 
-- The brief requests a brief hero pin, a slowly scaling/fading field, and the next section rising over the hero. The exact pin distance is intentionally not specified until the motion is approved and can be tested for scroll comfort.
-- Use scroll-triggered reveals and the illustration-panel expansion only where they clarify the content. Do not require smooth scrolling for navigation or content access.
-- With `prefers-reduced-motion`, remove the pin, parallax, count-up and entrance sequences; show the static gradient and one static canvas frame. Content must be visible if scripts fail.
-- The brief proposes Lenis and GSAP/ScrollTrigger, but these are not yet approved dependencies. Reassess whether native scrolling plus a small, lazy-loaded animation is sufficient before adding libraries.
+- **Hero pin (brief):** field slowly scales (propose **1 → 1.06**) and fades (propose **1 → 0.35**) while the next section rises over it; pin distance ≈**60–80 vh** — to be tuned for scroll comfort after implementation.
+- **Section reveals:** label → heading (masked lines) → paragraph → button; **opacity 0 → 1, 24 px rise**, 80–120 ms stagger.
+- **Card grids:** staggered entrance; hover **lift 4–6 px** + soft shadow + arrow nudge (reference had none — original extension).
+- **Counters:** count up when in view (placeholders `[X+]` only).
+- **Parallax:** large illustrations ±**24–40 px**, transform only.
+- **Photo-card expansion (Ref C pattern, original artwork):** rounded card (**radius 28 px**) scrolls in, **pins**, scales to full viewport while **radius → 0**, overlay text fades in. Pinned ScrollTrigger with **scrub on transform only** (scale/clip-path); propose pin length **~100 vh**. Replaced photo with an original SVG illustration or animated gradient scene.
+- **Dark/light flip (Ref C pattern):** when a section crosses **viewport center**, tween `--bg` / `--text` CSS variables on the page wrapper over **~500 ms** ease-in-out.
+- **Word-by-word highlight:** big intro sentence, word opacity **0.2 → 1** scrubbed with scroll; accent words get a **#F2C94C-tinted** highlight (dark text on the tint — never yellow text on light).
+- **Accordion (Ref B pattern, smoother than reference):** measured-height or `grid-template-rows` animation **~400 ms ease-in-out**; "+" rotates **45° to "×"**; one panel open at a time; `aria-expanded` / `aria-controls`; fully keyboard operable.
+- **Header:** transparent over hero → solid blur bar on scroll; **hides on scroll down, shows on scroll up** via `translateY` (the reference behavior, MEASURED); ~300 ms.
+- **Floating bottom pill (Ref C pattern, optional):** centered pill with 2–3 links/CTA, appears after the hero, hides near the footer; **desktop and tablet only (≥768 px)**.
+- **Page transitions:** short fade between routes (**~200 ms**); mobile menu = staggered full-screen overlay.
+
+### 4. Performance, fallbacks, reduced motion
+
+- Static gradient poster paints first (fast LCP); canvas code loads after first paint.
+- `prefers-reduced-motion`: one static gradient/halftone frame; no pin, parallax, counters or intro sequence; content fully readable without JS.
+- Pause the field when off-screen (IntersectionObserver) and when the tab is hidden.
+- `devicePixelRatio` capped at **1.5**; fewer dots on mobile; **auto-reduce density if fps < 50**.
+- Never hide content behind an animation; everything readable if JS fails.
+
+---
 
 ## Differences from the references
 
-- Vallumnar uses the requested original blue palette, not Vana's violet or the Awwwards-era lime/red/cobalt combinations.
-- Vallumnar artwork will be original abstract technology forms, not copied people, hands, keys, collage cutouts, logos, typography or silhouettes.
-- The reference hero is a video today and the archived page is Webflow-based; Vallumnar's proposed canvas and scroll treatment are independent implementations.
-- The airline patterns are limited to panel expansion, alternating section tone, gentle statistic glows and a colored CTA band. No airline imagery, copy or branding will be used.
+- Vallumnar: original blue palette (#0B2A4A/#1E3A8A/#1D4ED8/#2779A7/#F3F8FC + accent #F2C94C) — not Vana's violet/lime/red or the airline's orange/green/red.
+- Vallumnar hero is a live canvas field; Ref A ships a baked video. No reference video, image, font, copy or code is used.
+- Ref B has no scroll reveals and an instant accordion; Vallumnar adds smooth reveals, a 400 ms accordion and hover lifts — original extensions of the same component shapes.
+- Ref C contributes only the expansion, theme-flip and floating-pill patterns, re-built with original illustration.
 
 ## Approval gate
 
-This is a research specification only. No animation code, layout code, dependencies, assets or homepage features have been changed. Wait for the user's explicit approval before implementation.
+Research specification only. No animation code, layout code, dependencies or homepage features have been changed in this round. Wait for explicit approval before implementation.

@@ -1,107 +1,154 @@
 # Vallumnar Layout Spec
 
-**Status: research complete; awaiting approval. No feature code has been changed.**
+**Status: Step 0 research for the revised master prompt. Awaiting approval. No site code has been changed in this round.**
+This document replaces the previous layout spec. The existing homepage implementation predates this prompt and will be reworked after approval.
 
 ## Evidence and confidence
 
-- **MEASURED** values below come from the integrated browser or source-video metadata.
-- **ESTIMATED** values are proposed layout targets, including values in the user's revised brief. Handheld recordings support mood and sequence, not precise geometry.
-- Browser layout measurements account for the browser's scrollbar and the Wayback toolbar; those interface widths are not intended design widths.
-- The supplied recordings were used in place and were not copied into the repository. `/docs/references/` is ignored for future local-only material.
+- **MEASURED** = read from a real browser (Playwright) at **1440 × 900** and **390 × 844**, or from video stream metadata.
+- **ESTIMATED** = inferred from the handheld Ref C recording, or a proposed Vallumnar design target.
+- Study artifacts (recordings, frames, screenshots) live outside the repository and are never committed.
+- Copyright: pattern, structure, pacing and feel only — no reference asset, copy, font or code is used in the site.
 
-## What was inspected
+## Sources examined
 
-- Current Vana page: `https://vana.org/`, including hero and scroll behavior at **1440 × 900 px** and **390 × 844 px**.
-- Awwwards entry: `https://www.awwwards.com/sites/vana`; its “Visit Site” destination is `https://www.vana.com/`. A cookie dialog blocked the click, so the destination was navigated to directly.
-- Archived Awwwards-era site: `https://web.archive.org/web/20221019100623/https://www.vana.com/`. No Wayback link was visible on the Awwwards listing; the archived capture was opened directly.
-- The user-supplied `layout style and format.mp4` shows the Awwwards “See the highlights of this website” card gallery. Its recorded card grid is not treated as the original Vana page layout. The archived site itself was used to study that layout.
-- The airline recording was used only for its rounded expanding media panel, alternating dark/light sections, glow-backed statistic cards and pre-footer CTA.
+- `https://vana.org/` — Ref A, current site (real browser, both viewports, video + frame analysis).
+- `https://www.awwwards.com/sites/vana` — Ref B listing (Visit Site → `https://www.vana.com/`).
+- `https://web.archive.org/web/20221019100623/https://www.vana.com/` — Ref B, 2022 site (real browser, both viewports, full DOM survey).
+- `aniamtion looks.mp4` — Ref C recording (22.27 s, 576 × 1024, 30 fps); labeled contact sheet analyzed; geometry ESTIMATED.
 
-## Browser measurements
+---
 
-| Page and viewport | Measured geometry and behavior |
-| --- | --- |
-| Current Vana, desktop **1440 × 900 px** | **MEASURED:** Document content width **1430 px**; first hero section **746 px** tall. Sticky header **64 px**. Heading box begins at **x = 141 px, y = 236 px**, is **1002 × 190 px**, and uses **108 px** type with **95.04 px** line-height. Subtitle type is **25 px**. |
-| Current Vana, mobile **390 × 844 px** | **MEASURED:** Document content width **380 px**; document height **3523 px**. Hero is **696 px** tall; heading begins at **x = 11 px, y = 440 px**, is **354 × 92 px**, and uses **52 px** type. Header remains sticky at **64 px** and the nav presents a “Menu” button. |
-| Current Vana, scroll | **MEASURED:** At **350 px** page scroll on mobile, the header stays at **0 px** from the viewport top and the hero's top is **−286 px**. The hero scrolls upward at the sampled position rather than pinning. |
-| Archived Vana, desktop **1440 × 900 px** | **MEASURED:** Browser document width **1425 px**, height **7675 px**. The Wayback toolbar occupies **67 px** above the archived page. Archived hero section begins at **y = 67 px** and is **1546 px** tall. The hero heading is centered, set at **88 px**; later section headings measured **49.6–60 px**, and the large text loop uses **67.2 px** type. |
-| Archived Vana, mobile **390 × 844 px** | **MEASURED:** Browser document width **375 px**, height **9680 px**. The Wayback toolbar occupies **59 px**; archived hero section begins at **y = 59 px** and is **785 px** tall. The two-line hero heading is **48 px**. Top navigation links are hidden at this width. |
+## Ref A layout (MEASURED)
 
-## Archived Vana page rhythm
+### Geometry
 
-The following structure is **MEASURED** from the archived page's rendered sections; descriptions are summarized rather than copied.
-
-| Section | Desktop position | Rendered pattern |
+| Item | Desktop 1440 × 900 | Mobile 390 × 844 |
 | --- | --- | --- |
-| Hero | **y = 67 px; 1546 px tall** | Centered, large two-line heading, supporting copy, waitlist action and large colorful illustration below/around the copy. |
-| Intro / data context | **y = 1613 px; 938 px tall** | Light-gray band, large left-aligned heading and a three-column set of explanatory cards. |
-| How it works | **y = 2551 px; 2010 px tall** | Repeated two-column content rows; text and large circular/collage illustrations alternate sides. |
-| Data examples | **y = 4561 px; 375 px tall** | Short transition band and oversized animated/rolling text treatment. |
-| Build / product area | **y = 4937 px; 717 px tall** | Centered section heading with broad visual and product information. |
-| FAQ | **y = 5654 px; 1072 px tall** | Bright lime panel with a centered title and stacked accordion rows. |
-| Footer | **y = 6726 px; 246 px tall** | Large wordmark treatment, links and supporting footer content. |
+| Header | 64 px, sticky, opaque **#FCFCFA**, z-40 | 64 px, "Menu" control, sticky |
+| Hero height | **746 px** = 90 svh − nav | **696 px**; hero starts at y = 64 under header |
+| Headline | 1002 × 190 at x = 146, y = 236; **108 px / 95.04 px, w500, −5.4 px tracking, #111111** | 364 × 92 at x = 11, **y = 440**; **52 px / 45.76 px, −2.6 px** |
+| Subtitle | 865 px wide; **25 px / 30 px**, −0.375 px, 70 % black | **20 px / 24 px** |
+| Nav links | 15–17 px; filled CTA **#4141FC** (129 × 32) | Collapsed to "Menu" |
+| Page background | **#FCFCFA** cream throughout | same |
+| Field | Full-bleed video behind copy; left third near-white | Full-bleed |
 
-Additional layout observations:
+### Composition pattern
 
-- **MEASURED:** The archived desktop “How it works” rows use a repeated two-column arrangement. Text blocks measured **422 px** wide at **x = 178 px** and **x = 810 px** as the content alternates sides.
-- **MEASURED:** On mobile, the archived hero heading is **48 px**; the introductory section heading is **27 px**; the “How it works” heading is **32 px**; and its step headings are **24 px**. The large rolling text uses **38 px** type at this viewport.
-- **ESTIMATED:** The archived feature cards read as cream/light cards with rounded corners and gentle separation from their section background. The handheld Awwwards gallery recording is not precise enough to assert a radius or gap measurement.
-- **MEASURED:** The archived page has a very long hero/intro transition and generous vertical section bands; it does not use a compact, dashboard-like grid.
-- **MEASURED:** The archived page loads Webflow, jQuery and the Webflow `ix2` runtime. These tools are evidence about the inspected page only, not dependencies recommended for Vallumnar.
-- **ESTIMATED:** In the supplied recording, each Awwwards feature card has an inset cream preview with a rounded edge against a dark navy gallery background. That recording captures the Awwwards gallery, not the original site's grid.
+- Left-aligned copy block over a right-weighted animated field; generous empty space; no cards inside the hero.
+- Below the hero: a row of numbered cards ("FOR YOU 01 / FOR BUILDERS 02 / FOR THE MOVERS 03") — a numbered-card row directly under the fold.
+- No pinned sections; the header never moves or restyles.
 
-## Current Vana layout and responsive behavior
+---
 
-- **MEASURED:** The current site is visually distinct from its archived Awwwards-era design. Its desktop hero places large left-aligned copy over a full-width animated field; the mobile hero keeps the same video treatment and uses a compact menu.
-- **MEASURED:** The current sticky header stays at the viewport top while the hero scrolls away. The archived desktop design uses a separate Wayback toolbar, so archived header behavior is not conflated with the current page's header.
-- **ESTIMATED:** The user's hero recording communicates a quiet, light composition with copy held steady while texture changes on the opposite side. The exact source-device viewport and perspective make its pixel proportions unreliable.
+## Ref B layout — Vana 2022 archived (MEASURED)
 
-## Proposed original Vallumnar homepage
+### Page rhythm, desktop 1440 (document height 7623 px)
 
-Everything in this section is **ESTIMATED (proposed design target, not a reference measurement)** and is pending approval. The revised user brief provides the section order and several target dimensions; additional spacing and radius ranges below are starting points for review.
+| Section | y / height | Background |
+| --- | --- | --- |
+| Hero | 0 / **1562 px** | **#FFFFFF** |
+| Intro ("so much more than bytes") | 1562 / **938 px** | **#F5F4F4** |
+| How it works | 2500 / **2010 px** | **#F5F4F4** (pt 48, pb 112) |
+| Rolling text band | 4510 / 375 px | transparent |
+| Build with Vana | 4885 / 717 px | transparent |
+| FAQ | 5603 / **1072 px** | lime panel inside grey band |
+| Transition band | 6674 / 246 px | **#F5F4F4** |
+| Footer | 6920 / **703 px** | **#F5F4F4** (pt 32, pb 20.8) |
+
+Section vertical padding measured **pt 48 px / pb 112 px** — shorter than it looks because content blocks are tall.
+
+### Container and grid
+
+- Content container **1248 px** (nav container 1280 px) inside 1440 → side gutters ≈96 px.
+- "How it works": **CSS grid, 2 columns, gap 48 px row / 16 px column**, 1248 px wide, 7 children.
+- Three-card row: flex `box__parent`, 1264 px wide, **3 cards ≈400 px each** (card padding `60px 0 36px`).
+- Step boxes: white, **radius 16 px**, 616 × 489, padding `159px 104px 159px 89.6px`; circular variants radius 480 px.
+- **No shadows anywhere**: cards separate from the #F5F4F4 band by white fill alone.
+
+### Type scale, desktop
+
+| Role | Size / line-height / tracking / weight |
+| --- | --- |
+| Hero h1 | **88 / 88 px, −3.2 px, 700** |
+| Statement h2 | **49.6 / 51.2 px, −1.92 px, 700** |
+| Section h2 | **60 / 60 px, −1.92 px, 700** |
+| h3 | **36.8 / 33.12 px, −1.12 px, 700** |
+| Body p | **20 / 30 px, w500, #4B515A** (secondary 16 / 24) |
+| Links | 18 / 28.8 px |
+
+### Type scale, mobile 390 (document height 9554 px)
+
+h1 **48 / 48 px, −1.6 px**; statement h2 **27.2 / 32 px**; section h2 **32 / 32 px**; h3 **24 / 21.6 px**; body **16 / 24 px**. Mobile cards 362 px wide (≈14 px gutters), padding `32px 24px 33.6px`.
+
+### Components
+
+- **Tag pills:** height **26 px**, radius **16 px**, padding **1.6 px 14.4 px**, font **14.4 px**, background **#DBFF00** lime ("01. Store", "02. Explore", "03. Play").
+- **FAQ:** lime panel **1248 × 1072 px, radius 16 px** (`#DBFF00`) inside the grey band; inner content column **715 px**; heading block 414 px. Rows white, ≈**98 px collapsed → 186 px expanded**, radius 16 px. Mobile FAQ panel: section itself lime, 1025 px tall.
+- **Buttons:** radius ≈8–16 px; hover = color inversion, **0.3 s cubic-bezier(0.77, 0, 0.175, 1)**.
+- **Footer:** link columns + newsletter; **giant wordmark is an image 1181 px wide** cropped at the bottom edge (y = 7339 of 7623).
+- **Header:** fixed, transparent, hides on scroll down (`translateY(-160 px)`).
+
+---
+
+## Ref C layout (from labeled contact sheet; geometry ESTIMATED)
+
+- **Dark hero:** centered headline, small stat row beneath, multi-color gradient glow behind the text.
+- **Expanding card:** rounded card below the headline grows to ~full viewport during scroll (corner radius visibly persists while large), then overlay copy fades in over the image.
+- **Alternating bands:** light/dark/ light/dark as sections cross the viewport — at least 4 flips in 22 s of scrolling (flip points ≈7–8 s, 15–16 s, 20–21 s in the recording; actual triggers are scroll-position based).
+- **Stat/feature tiles:** a row of **4 gradient tiles** (big numbers/labels) on dark.
+- **Red CTA band** immediately above a **dark footer** with 3–4 link columns.
+- **Floating bottom pill:** centered, white, persistent, containing a red action button; sits above content at all times.
+- Exact pixel values (radius, scale, pin length) are not measurable from the recording → proposals in MOTION_SPEC.
+
+---
+
+## Proposed original Vallumnar layout
+
+Everything in this section is **ESTIMATED design target** and awaits approval.
 
 ### Global frame
 
-- Use a centered **12-column** content grid with a maximum width of about **1280 px** on wide screens.
-- Proposed section spacing: **96–144 px** on desktop, **64–88 px** on tablet, and **48–72 px** on mobile.
-- Proposed shared card radius: about **24 px**, with restrained shadows and thin borders. Keep one radius system rather than mixing unrelated shapes.
-- **ESTIMATED (user-specified palette; not sampled from the references):** deep blue `#0B2A4A` to `#1E3A8A`, primary `#1D4ED8`, mid blue `#2779A7`, light tint `#F3F8FC`, white, ink `#0F172A`, body `#475569`, and one warm accent `#F2C94C`.
-- Check each final foreground/background pair against WCAG AA before implementation. Do not use the warm accent for small text unless the selected pairing passes contrast; do not use the references' purple, lime or red palette.
-- Use Plus Jakarta Sans or Inter through `next/font`. The proposed display scale can reach about **7 rem** on desktop, then clamp fluidly. Do not force the same desktop line breaks onto mobile.
-- The header contains the Vallumnar mark, Services, Products, Careers, About, Contact and a “Contact us” action; mobile uses a “Menu” control. The footer groups Explore, Read and Find us links with legal links, newsletter and a contact note.
-- Proposed layout targets come from the brief: responsive checks at **320, 375, 768, 1024, 1440 and 1920 px**; no horizontal overflow or inaccessible off-canvas content at those widths.
+- 12-column grid, max width **1280 px** (content 1152–1280), side gutters ≥32 px.
+- Section vertical padding: **96–160 px desktop, 64–96 px mobile**.
+- Card radius **20–28 px** (single radius system); restrained shadows or borderless fill; thin borders only where needed.
+- Palette: deep blue **#0B2A4A → #1E3A8A**, primary **#1D4ED8**, mid blue **#2779A7**, light tint **#F3F8FC**, white, ink **#0F172A**, body **#475569**, one warm accent **#F2C94C**.
+- Contrast pairs to keep AA (computed): #0F172A on #FFFFFF ≈ 17:1; #475569 on #FFFFFF ≈ 7.5:1 and on #F3F8FC ≈ 7.2:1; #FFFFFF on #1D4ED8 ≈ 6.3:1; #FFFFFF on #2779A7 ≈ 4.8:1; #0F172A on #F2C94C ≈ 11.4:1. **#F2C94C on white ≈ 1.6:1 — never as text on light backgrounds.**
+- Type: **Plus Jakarta Sans or Inter** via `next/font`; display up to **~7 rem** clamped; tight tracking on display; generous body line-height; readable measure (~60–70 ch).
+- Header: logo, Services, Products, Careers, About, Contact + "Contact us" button; "Menu" on mobile.
+- Footer groups: Explore / Read / Find us + legal + newsletter + contact note + giant cropped wordmark.
 
-### Home page, in the requested order
+### Home page sections (order per brief)
 
-| Order | Proposed section and arrangement |
-| --- | --- |
-| **ESTIMATED: 1** | **Hero:** Full-bleed, light blue/white canvas field on the right; left-aligned original headline, short subtitle, two actions and a scroll cue. The content is Vallumnar-specific; draft copy remains a placeholder until approved. |
-| **ESTIMATED: 2** | **Four audience cards:** Four numbered cards across on desktop, a **2 × 2** grid on tablet and a vertical stack on mobile. Each has a short label, one statement and a directional link. |
-| **ESTIMATED: 3** | **Large intro statement:** One prominent sentence with selected words accented, revealed progressively as it enters view. |
-| **ESTIMATED: 4** | **How we work:** Text block on one side and a large original circular illustration on the other; stack naturally on mobile. |
-| **ESTIMATED: 5** | **Services showcase:** One illustrated panel per service. A horizontal/sticky sequence may be considered at large widths; mobile should use a vertical, readable sequence rather than requiring horizontal scrolling. |
-| **ESTIMATED: 6** | **Products:** Cards with original line illustrations and brief, accurate descriptions. |
-| **ESTIMATED: 7** | **Expanding illustration panel:** A single original SVG illustration expands into the stats area on scroll, then releases without trapping the reader. |
-| **ESTIMATED: 8** | **Stats band:** Gradient-glow cards with count-up only for verified figures; use `[X+]` placeholders until Vallumnar supplies real data. |
-| **ESTIMATED: 9** | **FAQ:** Tinted panel with an accessible accordion. The brief proposes **5–6** questions; mark any draft answers that need company confirmation. |
-| **ESTIMATED: 10** | **Careers banner:** Full-width deep-blue section with an original, restrained animated motif and an obvious careers action. |
-| **ESTIMATED: 11** | **Insights:** Three blog cards with date/title/excerpt placeholders and a link to the blog; do not present fabricated articles as published content. |
-| **ESTIMATED: 12** | **Footer:** Oversized Vallumnar wordmark, short tagline, newsletter signup, grouped links, legal links and a contact note. |
+| # | Section | Layout |
+| --- | --- | --- |
+| 1 | **Hero** | Full-bleed canvas field (right-weighted), left copy: headline (5–8 words), 2-line subtitle, "Our services" + "Join our team", scroll cue. |
+| 2 | **Audience cards ×4** | 4 across desktop → 2 × 2 tablet → stack mobile; number "01–04", label, statement, arrow link. |
+| 3 | **Intro statement** | Huge centered sentence, accent words highlighted, word-by-word scroll reveal. |
+| 4 | **Photo-card expansion** | Rounded 28 px card pins and scales to fullscreen, radius → 0, overlay headline ("A global team, one standard of quality."); followed by a dark→light section flip. |
+| 5 | **Feature cards ×3** | Small "UI-like" SVG illustrations (toggle, line graph, grid) + title + two lines; 3 across. |
+| 6 | **Services showcase** | Sticky-scroll panels; illustration swaps per service (cloud, AI/data, web+mobile, UX, QA, consulting, support); vertical stack on mobile. |
+| 7 | **How we work** | SplitFeature: text card + circular illustration, 3–4 steps with tag pills; reversible; stacks on mobile. |
+| 8 | **Products** | Cards with original line illustrations, title, short text, link. |
+| 9 | **Stats band** | Count-up numbers on gradient tiles, placeholders `[X+]`. |
+| 10 | **Careers PromoBand** | Full-width deep blue/primary band, decorative checker/dot corners, big text, "Join our team". |
+| 11 | **FAQ accordion** | Light-blue or yellow-tinted panel (Vallumnar translation of the lime reference), white rounded rows, "+/×" icon, 5–6 placeholder questions. |
+| 12 | **Insights** | 3 blog cards (date, title, excerpt, "Read the post") + "Read the blog"; placeholders marked. |
+| 13 | **Footer** | Tagline, newsletter, link columns, legal, contact note, **giant cropped "Vallumnar" wordmark** with subtle reveal. |
 
-### Responsive and interaction layout
+### Component inventory (typed, reusable)
 
-- **ESTIMATED (brief target):** Audience cards transition from four columns to **2 × 2** and then to a single column at tablet/mobile widths.
-- **ESTIMATED:** Keep text and actions in DOM reading order even when desktop rows alternate. At mobile widths, stack content and artwork without overlays that obscure the copy.
-- **ESTIMATED:** The media expansion should use a single containing panel and remain clipped only while it animates; at reduced motion, render its final static layout.
-- **ESTIMATED:** Limit the hero art and large illustrations to their own grid areas. Do not allow decorative art to force page width beyond the viewport.
-- **ESTIMATED:** Keep tap targets at least **44 × 44 px**, provide visible keyboard focus, and ensure accordion state is communicated with `aria-expanded`.
+`Header`, `Button` (primary/secondary/ghost + arrow, focus ring), `Tag`, `AudienceCard`, `StatementBlock`, `FeatureCard`, `SplitFeature`, `ServiceShowcase`, `ProductCard`, `StatCard`, `PromoBand`, `Accordion`, `BlogCard`, `NewsletterForm` (Zod + honeypot), `Footer`, `SectionWrapper` (light/dark theme flips), motion primitives `Reveal`, `SplitText`, `Counter`, `Parallax`, `Pinned`.
 
-## Originality and content boundaries
+### Responsive checkpoints
 
-- Use Vallumnar blues, the requested warm accent, and original SVG/canvas artwork. Do not reproduce Vana's wordmark, copy, color combinations, illustrations, silhouettes or imagery.
-- Do not use airline photography, logos, copy, visual assets or source code. The reference contributes only the listed pacing and layout patterns.
-- Do not invent client logos, project counts, testimonials, awards, team photos, company history, dates or published insights. Keep unresolved facts visibly marked for `CONTENT_TODO.md` during implementation.
+320 / 375 / 768 / 1024 / 1440 / 1920 px; no horizontal scroll; tap targets ≥44 px; audience cards 4 → 2×2 → 1; showcase sticky behavior desktop-only; floating pill ≥768 px; artwork never widens the document.
+
+### Illustration and content rules
+
+- Original inline SVG only: 2–3 px outlines, flat fills + one soft gradient, rounded shapes, checker/dot accents, circular frames for split features; motifs per service (cloud, AI nodes, screens, wireframe, checklist, handshake/graph, headset).
+- No stock images, no copied artwork, no invented facts — placeholders stay marked in `CONTENT_TODO.md`.
 
 ## Approval gate
 
-This document records research and a proposed layout only. No homepage, route, component, style, asset or dependency has been changed. Wait for the user's explicit approval before implementing the layout.
+Research and proposed layout only. No route, component, style, asset or dependency has been changed in this round. Wait for explicit approval before implementation.
